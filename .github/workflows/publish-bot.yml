@@ -18,6 +18,7 @@ jobs:
         run: |
           echo "User is AriaMinaei and comment contains the trigger."
 
+      - uses: actions/checkout@v2
       - name: Get the latest commit hash
         run: |
           COMMIT=$(git log --pretty=format:'%h' -n 1)
