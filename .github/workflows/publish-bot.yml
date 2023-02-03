@@ -14,6 +14,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: print everything in the event
+        run: |
+          echo ${{ toJSON(github.event) }}
+
       - name: Check if user is AriaMinaei and comment contains "/Publish insiders build"
         if: "${{ github.event.comment.user.login }} == 'AriaMinaei' && contains(${{ github.event.comment.body }}, '/Publish insiders build')"
         run: |
