@@ -18,12 +18,13 @@ jobs:
         run: |
           echo "${{ toJson(github.event) }}"
 
-      # get pull request ref from ${{ github.event.issue.pull_request.url }}
+      # get pull request ref from ${{ github.event.issue.pull_request.url }}, and print it
       - name: Get pull request ref
         id: pr-ref
         run: |
           PR_REF=$(curl -s ${{ github.event.issue.pull_request.url }} | jq -r .head.ref)
           echo "PR_REF=$PR_REF" >> $GITHUB_ENV
+          echo "PR_REF=$PR_REF"
 
       - name: Check if user is AriaMinaei and comment contains "/Publish insiders build"
         if: "${{ github.event.comment.user.login }} == 'AriaMinaei' && contains(${{ github.event.comment.body }}, '/Publish insiders build')"
@@ -33,7 +34,7 @@ jobs:
       # checkout the repo at the branch that the PR is targeting
       - uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.issue.pull_request.base.ref }}
+          ref: ${{ env.PR_REF }}
       - name: Get the latest commit hash
         id: last-commit
         run: |
