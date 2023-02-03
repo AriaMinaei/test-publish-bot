@@ -10,6 +10,7 @@ env:
 
 jobs:
   publish:
+    if: ${{ github.event.issue.pull_request }}
     runs-on: ubuntu-latest
 
     steps:
@@ -18,6 +19,10 @@ jobs:
         run: |
           echo "User is AriaMinaei and comment contains the trigger."
 
+      # checkout the repo at the branch that the PR is targeting
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
       - uses: actions/checkout@v2
       - name: Get the latest commit hash
         id: last-commit
