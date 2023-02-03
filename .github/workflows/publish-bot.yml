@@ -21,6 +21,7 @@ jobs:
       # get pull request ref from ${{ github.event.issue.pull_request.url }}, and print it
       - name: Get pull request ref
         id: pr-ref
+        # this gets the pull request ref from the issue_comment event. curl is used to get the pull request ref from the pull request url, and jq is used to parse the json response
         run: |
           PR_REF=$(curl -s ${{ github.event.issue.pull_request.url }} | jq -r .head.ref)
           echo "PR_REF=$PR_REF" >> $GITHUB_ENV
@@ -35,6 +36,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ env.PR_REF }}
+
       - name: Get the latest commit hash
         id: last-commit
         run: |
@@ -42,15 +44,10 @@ jobs:
           echo "Latest commit hash: $COMMIT"
           echo "last-commit=$COMMIT" >> $GITHUB_ENV
 
-      - name: Respond with the latest commit hash
-        uses: actions/github-script@v3
+      # leave a comment on the PR with the commit hash
+      - name: Leave a comment on the PR with the commit hash
+        uses: peter-evans/create-or-update-comment@v1
         with:
-          github-token: "${{ env.GITHUB_TOKEN }}"
-          script: |
-            const commentBody = `Okay, i'll publish ${{env.last-commit}}`;
-            const { data: { id: commentId } } = await octokit.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: commentBody
-            });
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            The latest commit hash is ${{ env.last-commit }}.
