@@ -22,7 +22,7 @@ jobs:
       # checkout the repo at the branch that the PR is targeting
       - uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.pull_request.base.ref }}
+          ref: ${{ github.event.issue.pull_request.base.ref }}
       - name: Get the latest commit hash
         id: last-commit
         run: |
