@@ -18,6 +18,13 @@ jobs:
         run: |
           echo "${{ toJson(github.event) }}"
 
+      # get pull request ref from issue_comment event
+      - name: Get pull request ref
+        id: pr-ref
+        run: |
+          echo "Pull request ref: ${{ github.event.issue.pull_request.head.ref }}"
+          echo "pr-ref=${{ github.event.issue.pull_request.head.ref }}" >> $GITHUB_ENV
+
       - name: Check if user is AriaMinaei and comment contains "/Publish insiders build"
         if: "${{ github.event.comment.user.login }} == 'AriaMinaei' && contains(${{ github.event.comment.body }}, '/Publish insiders build')"
         run: |
