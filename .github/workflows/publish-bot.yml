@@ -12,6 +12,8 @@ jobs:
   publish:
     if: ${{ github.event.issue.pull_request }}
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
 
     steps:
       - name: print everything in the event
