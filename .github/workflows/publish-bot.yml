@@ -18,12 +18,12 @@ jobs:
         run: |
           echo "${{ toJson(github.event) }}"
 
-      # get pull request ref from issue_comment event
+      # get pull request ref from ${{ github.event.issue.pull_request.url }}
       - name: Get pull request ref
         id: pr-ref
         run: |
-          echo "Pull request ref: ${{ github.event.issue.pull_request.head.ref }}"
-          echo "pr-ref=${{ github.event.issue.pull_request.head.ref }}" >> $GITHUB_ENV
+          PR_REF=$(curl -s ${{ github.event.issue.pull_request.url }} | jq -r .head.ref)
+          echo "PR_REF=$PR_REF" >> $GITHUB_ENV
 
       - name: Check if user is AriaMinaei and comment contains "/Publish insiders build"
         if: "${{ github.event.comment.user.login }} == 'AriaMinaei' && contains(${{ github.event.comment.body }}, '/Publish insiders build')"
