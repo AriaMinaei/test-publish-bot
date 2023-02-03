@@ -48,7 +48,7 @@ jobs:
 
       # leave a comment on the PR with the commit hash
       - name: Leave a comment on the PR with the commit hash
-        uses: peter-evans/create-or-update-comment@v1
+        uses: peter-evans/create-or-update-comment@v2
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
