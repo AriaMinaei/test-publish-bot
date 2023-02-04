@@ -84,7 +84,7 @@ jobs:
               Published at commit ${{ steps.pr-ref.outputs.result.sha }}.
               <details><summary>see more</summary>
 
-              Details here
+              Workflow log [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
 
               </details>
               `
