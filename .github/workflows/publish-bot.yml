@@ -64,14 +64,12 @@ jobs:
         with:
           result-encoding: string
           script: |
-            console.log(context.payload.comment.user)
-
             const res = await github.rest.repos.getCollaboratorPermissionLevel({
               ...context.repo,
               username: context.payload.comment.user.login,
             });
 
-            console.log(res)
+            console.log(res.data.user)
 
       - name: Check if user is AriaMinaei and comment contains "/Publish insiders build"
         if: "${{ github.event.comment.user.login }} == 'AriaMinaei' && contains(${{ github.event.comment.body }}, '/Publish insiders build')"
