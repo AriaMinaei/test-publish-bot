@@ -45,7 +45,7 @@ jobs:
             const commentId = result.data.id
 
             const {data: pullRequest} = await github.rest.pulls.get({
-              ...github.context.repo,
+              ...context.repo,
               pull_number: context.issue.number
             })
 
