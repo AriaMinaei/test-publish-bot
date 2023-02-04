@@ -24,7 +24,7 @@ jobs:
         id: start-comment
         uses: actions/github-script@v6
         with:
-          encoding: string
+          result-encoding: string
           script: |
             const result = await github.rest.issues.createComment({
               issue_number: context.issue.number,
@@ -50,7 +50,7 @@ jobs:
         id: pr-ref
         uses: actions/github-script@v6
         with:
-          encoding: string
+          result-encoding: string
           script: |
             const {data: pullRequest} = await github.rest.pulls.get({
               ...context.repo,
@@ -71,7 +71,7 @@ jobs:
       # checkout the repo at the latest commit of the PR
       - uses: actions/checkout@v2
         with:
-          ref: ${{ fromJSON(steps.pr-ref.outputs.result) }}
+          ref: ${{ steps.pr-ref.outputs.result }}
 
       - name: Update the comment
         id: update-comment
