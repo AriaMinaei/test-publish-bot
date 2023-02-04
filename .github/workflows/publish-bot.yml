@@ -64,11 +64,11 @@ jobs:
         with:
           result-encoding: string
           script: |
-            console.log(context)
+            console.log(context.payload.comment.user)
 
             const res = await github.rest.repos.getCollaboratorPermissionLevel({
               ...context.repo,
-              username: context.comment.user.login,
+              username: context.payload.comment.user.login,
             });
 
             console.log(res)
