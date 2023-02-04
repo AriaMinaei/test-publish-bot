@@ -20,17 +20,12 @@ jobs:
       pull-requests: write
 
     steps:
-      # leave a comment on the PR with the commit hash, using actions/github-script
-      - name: print everything
-        run: |
-          echo "${{ toJson(github) }}"
       - name: Start the comment
         id: start-comment
         uses: actions/github-script@v6
         with:
           # github-token: ${{ env.GITHUB_TOKEN }}
           script: |
-            console.log(github)
             console.log(context)
 
             const result = await github.rest.issues.createComment({
@@ -53,8 +48,10 @@ jobs:
 
             const {data: pullRequest} = await this.octokit.rest.pulls.get({
               ...github.context.repo,
-              pull_number: pullNumber
+              pull_number: context.issue.number
             })
+
+            console.log(pullRequest)
 
             return result
 
