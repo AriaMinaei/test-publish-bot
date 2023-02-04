@@ -59,6 +59,20 @@ jobs:
 
             return pullRequest.head.sha
 
+      # check if the user is an owner of the repo
+      - name: Has write access
+        id: has-write-access
+        uses: actions/github-script@v6
+        with:
+          result-encoding: string
+          script: |
+            const res = await github.rest.repos.getCollaboratorPermissionLevel({
+              ...context.repo,
+              username: context.comment.user.login,
+            });
+
+            console.log(res)
+
       - name: Check if user is AriaMinaei and comment contains "/Publish insiders build"
         if: "${{ github.event.comment.user.login }} == 'AriaMinaei' && contains(${{ github.event.comment.body }}, '/Publish insiders build')"
         run: |
