@@ -65,6 +65,10 @@ jobs:
         run: |
           echo "User is AriaMinaei and comment contains the trigger."
 
+      - name: print the ref
+        run: |
+          echo "toJSON( ${{ steps.pr-ref.outputs.result }} )"
+
       # checkout the repo at the latest commit of the PR
       - uses: actions/checkout@v2
         with:
