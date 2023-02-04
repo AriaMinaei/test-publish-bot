@@ -30,14 +30,16 @@ jobs:
         with:
           # github-token: ${{ env.GITHUB_TOKEN }}
           script: |
-            github.rest.issues.createComment({
+            return github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: `
               Publishing an insiders build. Will update this comment when done.
               <details><summary>see more</summary>
-                * Follow the workflow run [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+              Follow the workflow run [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
               </details>
               `
             })
