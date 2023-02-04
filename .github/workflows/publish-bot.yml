@@ -30,7 +30,7 @@ jobs:
         with:
           # github-token: ${{ env.GITHUB_TOKEN }}
           script: |
-            return github.rest.issues.createComment({
+            const result = await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -43,9 +43,10 @@ jobs:
               </details>
               `
             })
-      - name: print the result of the previous step
-        run: |
-          echo "${{ toJson(steps.start-comment.outputs.result) }}"
+
+            console.log(result)
+
+            return result
 
       # get pull request ref from ${{ github.event.issue.pull_request.url }}, and print it
       - name: Get pull request ref
