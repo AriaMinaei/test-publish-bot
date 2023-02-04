@@ -140,7 +140,7 @@ jobs:
               }).join('\n')}
 
 
-              Workflow log [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}), published at the request of @${context.payload.comment.user.login}, on commit #${{ steps.pr-ref.outputs.result }}.
+              Published at the request of @${context.payload.comment.user.login}, on commit ${{ steps.pr-ref.outputs.result }}. Workflow log [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) to debug.
 
               </details>
               `
