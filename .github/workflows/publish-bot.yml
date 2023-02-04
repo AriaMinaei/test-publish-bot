@@ -20,9 +20,30 @@ jobs:
       pull-requests: write
 
     steps:
-      # - name: print everything in the event
-      #   run: |
-      #     echo "${{ toJson(github.event) }}"
+      # leave a comment on the PR with the commit hash, using actions/github-script
+      - name: print everything
+        run: |
+          echo "${{ toJson(github) }}"
+      - name: Start the comment
+        id: start-comment
+        uses: actions/github-script@v6
+        with:
+          # github-token: ${{ env.GITHUB_TOKEN }}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `
+              Publishing an insiders build. Will update this comment when done.
+              <details><summary>see more</summary>
+                * Follow the workflow run [here](${{ github.run_url }})
+              </details>
+              `
+            })
+      - name: print the result of the previous step
+        run: |
+          echo "${{ toJson(steps.start-comment) }}"
 
       # get pull request ref from ${{ github.event.issue.pull_request.url }}, and print it
       - name: Get pull request ref
@@ -50,15 +71,14 @@ jobs:
           echo "Latest commit hash: $COMMIT"
           echo "last-commit=$COMMIT" >> $GITHUB_ENV
 
-      # leave a comment on the PR with the commit hash, using actions/github-script
-      - name: Leave a comment on the PR
-        uses: actions/github-script@v6
-        with:
-          # github-token: ${{ env.GITHUB_TOKEN }}
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: 'Latest commit hash: ${{ env.last-commit }}'
-            })
+      # - name: Leave a comment on the PR
+      #   uses: actions/github-script@v6
+      #   with:
+      #     # github-token: ${{ env.GITHUB_TOKEN }}
+      #     script: |
+      #       github.rest.issues.createComment({
+      #         issue_number: context.issue.number,
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         body: 'Latest commit hash: ${{ env.last-commit }}'
+      #       })
