@@ -126,7 +126,7 @@ jobs:
 
               *  🚧 This is an insiders' build. It possibly **is not stable and _may_ corrupt your data**. Always **backup your work** before upgrading.
               * If you do try this build, welcome aboard, insider 😉. If you're feeling generous, share some feedback here or on [\`#contributing\`](https://discord.com/channels/870988717190426644/940301611023073400) at Discord.
-              * 🔼 To upgrade, edit `package.json` and set \`@theatre/*\` or \`theatric\` to \`0.6.0-insiders.ca78739\` 
+              * 🔼 To upgrade, edit \`package.json\` and set \`@theatre/*\` or \`theatric\` to \`0.6.0-insiders.ca78739\` 
 
               Example:
               \`\`\`diff
