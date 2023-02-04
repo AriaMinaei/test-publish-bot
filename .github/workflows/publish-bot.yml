@@ -104,14 +104,45 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
+            const published = [{
+              packageName: "@theatre/core",
+              version: "0.6.0-insiders.sdlkfj29",
+            }, {
+              packageName: "@theatre/studio",
+              version: "0.6.0-insiders.sdlkfj29",
+            }]
+
             const result = await github.rest.issues.updateComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               comment_id: "${{ steps.start-comment.outputs.result }}",
               body: `
-              Published at commit ${{ steps.pr-ref.outputs.result }}.
-              <details><summary>see more</summary>
+              
+
+              <details>
+              <summary>🎉 Released an insiders' build to npm. Here is how to upgrade:</summary>
+
+
+              *  🚧 This is an insiders' build. It possibly **is not stable and _may_ corrupt your data**. Always **backup your work** before upgrading.
+              * If you do try this build, welcome aboard, insider 😉. If you're feeling generous, share some feedback here or on [\`#contributing\`](https://discord.com/channels/870988717190426644/940301611023073400) at Discord.
+              * 🔼 To upgrade, edit `package.json` and set \`@theatre/*\` or \`theatric\` to \`0.6.0-insiders.ca78739\` 
+
+              Example:
+              \`\`\`diff
+              --- "@theatre/core": "old-version",
+              +++ "@theatre/core": "0.6.0-insiders.ca78739",
+              ...
+              --- "@theatre/studio": "0.6.0",
+              +++ "@theatre/studio": "0.6.0-insiders.ca78739",
+              ...
+              --- "@theatre/studio": "0.6.0",
+              +++ "@theatre/studio": "0.6.0-insiders.ca78739",
+              \`\`\`
+
+              All published packages are on npm:
+              * [\`@theatre/core@0.6.1-insiders.7dde8ab\`](https://www.npmjs.com/package/@theatre/core/v/0.6.1-insiders.7dde8ab)
+
 
               Workflow log [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
 
