@@ -79,7 +79,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            console.log(context)
+            console.log(${{ toJSON(steps.pr-ref.outputs.result) }})
 
             const result = await github.rest.issues.updateComment({
               issue_number: context.issue.number,
