@@ -126,23 +126,18 @@ jobs:
 
               *  🚧 This is an insiders' build. It possibly **is not stable and _may_ corrupt your data**. Always **backup your work** before upgrading.
               * If you do try this build, welcome aboard, insider 😉. If you're feeling generous, share some feedback here or on [\`#contributing\`](https://discord.com/channels/870988717190426644/940301611023073400) at Discord.
-              * 🔼 To upgrade, edit \`package.json\` and set \`@theatre/*\` or \`theatric\` to \`0.6.0-insiders.ca78739\` 
+              * 🔼 To upgrade, edit \`package.json\` like this:
 
-              Example:
               \`\`\`diff
-              --- "@theatre/core": "old-version",
-              +++ "@theatre/core": "0.6.0-insiders.ca78739",
-              ...
-              --- "@theatre/studio": "0.6.0",
-              +++ "@theatre/studio": "0.6.0-insiders.ca78739",
-              ...
-              --- "@theatre/studio": "0.6.0",
-              +++ "@theatre/studio": "0.6.0-insiders.ca78739",
+              ${published.map((pkg) => {
+                return `{--- ${pkg.packageName}: "old-version",\n+++ ${pkg.packageName}: "${pkg.version}"}`
+              }).join('\n')}
               \`\`\`
 
               All published packages are on npm:
-              * [\`@theatre/core@0.6.1-insiders.7dde8ab\`](https://www.npmjs.com/package/@theatre/core/v/0.6.1-insiders.7dde8ab)
-
+              ${published.map((pkg) => {
+                return `* [\`${pkg.packageName}@${pkg.version}\`](https://www.npmjs.com/package/${pkg.packageName}/v/${pkg.version)`
+              }).join('\n')
 
               Workflow log [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
 
