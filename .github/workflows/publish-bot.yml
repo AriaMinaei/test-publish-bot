@@ -24,7 +24,7 @@ jobs:
         id: start-comment
         uses: actions/github-script@v6
         with:
-          # github-token: ${{ env.GITHUB_TOKEN }}
+          encoding: string
           script: |
             const result = await github.rest.issues.createComment({
               issue_number: context.issue.number,
@@ -44,6 +44,13 @@ jobs:
 
             const commentId = result.data.id
 
+            return commentId
+
+      - name: Get the pull request's ref
+        id: pr-ref
+        uses: actions/github-script@v6
+        with:
+          script: |
             const {data: pullRequest} = await github.rest.pulls.get({
               ...context.repo,
               pull_number: context.issue.number
@@ -51,42 +58,35 @@ jobs:
 
             console.log(pullRequest)
 
-            return result
-
-      # get pull request ref from ${{ github.event.issue.pull_request.url }}, and print it
-      - name: Get pull request ref
-        id: pr-ref
-        # this gets the pull request ref from the issue_comment event. curl is used to get the pull request ref from the pull request url, and jq is used to parse the json response
-        run: |
-          PR_REF=$(curl -s ${{ github.event.issue.pull_request.url }} | jq -r .head.ref)
-          echo "PR_REF=$PR_REF" >> $GITHUB_ENV
-          echo "PR_REF=$PR_REF"
+            return {ref: pullRequest.head.ref, sha: pullRequest.head.sha}
 
       - name: Check if user is AriaMinaei and comment contains "/Publish insiders build"
         if: "${{ github.event.comment.user.login }} == 'AriaMinaei' && contains(${{ github.event.comment.body }}, '/Publish insiders build')"
         run: |
           echo "User is AriaMinaei and comment contains the trigger."
 
-      # checkout the repo at the branch that the PR is targeting
+      # checkout the repo at the latest commit of the PR
       - uses: actions/checkout@v2
         with:
-          ref: ${{ env.PR_REF }}
+          ref: ${{ steps.pr-ref.outputs.result.sha }}
 
-      - name: Get the latest commit hash
-        id: last-commit
-        run: |
-          COMMIT=$(git log --pretty=format:'%h' -n 1)
-          echo "Latest commit hash: $COMMIT"
-          echo "last-commit=$COMMIT" >> $GITHUB_ENV
+      - name: Update the comment
+        id: update-comment
+        uses: actions/github-script@v6
+        with:
+          encoding: string
+          script: |
+            const result = await github.rest.issues.updateComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: ${{ steps.start-comment.outputs.result }},
+              body: `
+              Published at commit ${{ steps.pr-ref.outputs.result.sha }}.
+              <details><summary>see more</summary>
 
-      # - name: Leave a comment on the PR
-      #   uses: actions/github-script@v6
-      #   with:
-      #     # github-token: ${{ env.GITHUB_TOKEN }}
-      #     script: |
-      #       github.rest.issues.createComment({
-      #         issue_number: context.issue.number,
-      #         owner: context.repo.owner,
-      #         repo: context.repo.repo,
-      #         body: 'Latest commit hash: ${{ env.last-commit }}'
-      #       })
+              Details here
+
+              </details>
+              `
+            })
