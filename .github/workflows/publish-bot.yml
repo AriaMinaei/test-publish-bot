@@ -123,21 +123,18 @@ jobs:
               <details>
               <summary>🎉 Released an insiders' build to npm. Here is how to upgrade:</summary>
 
-
               *  🚧 This is an insiders' build. It possibly **is not stable and _may_ corrupt your data**. Always **backup your work** before upgrading.
               * If you do try this build, welcome aboard, insider 😉. If you're feeling generous, share some feedback here or on [\`#contributing\`](https://discord.com/channels/870988717190426644/940301611023073400) at Discord.
               * 🔼 To upgrade, edit \`package.json\` like this:
 
               \`\`\`diff
               ${published.map((pkg) => {
-                return `{--- ${pkg.packageName}: "old-version",\n+++ ${pkg.packageName}: "${pkg.version}"}`
+                return `--- ${pkg.packageName}: "old-version",\n+++ ${pkg.packageName}: "${pkg.version}",`
               }).join('\n')}
               \`\`\`
 
               All published packages are on npm:
-              ${published.map((pkg) => {
-                return `* [\`${pkg.packageName}@${pkg.version}\`](https://www.npmjs.com/package/${pkg.packageName}/v/${pkg.version)`
-              }).join('\n')}
+
 
               Workflow log [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
 
