@@ -74,13 +74,12 @@ jobs:
         id: update-comment
         uses: actions/github-script@v6
         with:
-          encoding: string
           script: |
             const result = await github.rest.issues.updateComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              comment_id: ${{ steps.start-comment.outputs.result }},
+              comment_id: "${{ steps.start-comment.outputs.result }}",
               body: `
               Published at commit ${{ steps.pr-ref.outputs.result.sha }}.
               <details><summary>see more</summary>
