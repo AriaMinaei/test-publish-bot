@@ -10,7 +10,7 @@ env:
 
 jobs:
   publish:
-    if: ${{ github.event.issue.pull_request }}
+    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/Publish insiders build') }}
     runs-on: ubuntu-latest
 
     permissions:
@@ -20,6 +20,39 @@ jobs:
       pull-requests: write
 
     steps:
+      # check if the user is an owner of the repo
+      - name: Has write access
+        id: has-write-access
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const res = await github.rest.repos.getCollaboratorPermissionLevel({
+              ...context.repo,
+              username: context.payload.comment.user.login,
+            });
+
+            console.log(res.data.permission)
+
+            const hasPermission = ['admin', 'write', 'maintain'].includes(res.data.permission)
+
+            if (!hasPermission) {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `Cannot publish because user @${context.payload.comment.user.login} doesn't have write access.`
+              })
+            }
+
+            return hasPermission
+
+      # stop the workflow if the user doesn't have write access
+      - name: Stop if user doesn't have write access
+        if: ${{ !steps.has-write-access.outputs.result }}
+        run: |
+          echo "User doesn't have write access. Stopping the workflow."
+          exit 1
+
       - name: Start the comment
         id: start-comment
         uses: actions/github-script@v6
@@ -57,25 +90,6 @@ jobs:
 
             return pullRequest.head.sha
 
-      # check if the user is an owner of the repo
-      - name: Has write access
-        id: has-write-access
-        uses: actions/github-script@v6
-        with:
-          result-encoding: string
-          script: |
-            const res = await github.rest.repos.getCollaboratorPermissionLevel({
-              ...context.repo,
-              username: context.payload.comment.user.login,
-            });
-
-            console.log(res.data.user)
-
-      - name: Check if user is AriaMinaei and comment contains "/Publish insiders build"
-        if: "${{ github.event.comment.user.login }} == 'AriaMinaei' && contains(${{ github.event.comment.body }}, '/Publish insiders build')"
-        run: |
-          echo "User is AriaMinaei and comment contains the trigger."
-
       - name: print the ref
         run: |
           echo "${{ steps.pr-ref.outputs.result }}"
@@ -90,8 +104,6 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-
-
             const result = await github.rest.issues.updateComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
