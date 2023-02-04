@@ -137,7 +137,7 @@ jobs:
               All published packages are on npm:
               ${published.map((pkg) => {
                 return `* [\`${pkg.packageName}@${pkg.version}\`](https://www.npmjs.com/package/${pkg.packageName}/v/${pkg.version)`
-              }).join('\n')
+              }).join('\n')}
 
               Workflow log [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
 
