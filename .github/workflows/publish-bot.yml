@@ -37,7 +37,7 @@ jobs:
               body: `
               Publishing an insiders build. Will update this comment when done.
               <details><summary>see more</summary>
-                * Follow the workflow run [here](${{ github.run_url }})
+                * Follow the workflow run [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
               </details>
               `
             })
