@@ -46,10 +46,15 @@ jobs:
           echo "Latest commit hash: $COMMIT"
           echo "last-commit=$COMMIT" >> $GITHUB_ENV
 
-      # leave a comment on the PR with the commit hash
-      - name: Leave a comment on the PR with the commit hash
-        uses: peter-evans/create-or-update-comment@v2
+      # leave a comment on the PR with the commit hash, using actions/github-script
+      - name: Leave a comment on the PR
+        uses: actions/github-script@v3
         with:
-          issue-number: ${{ github.event.issue.number }}
-          body: |
-            The latest commit hash is ${{ env.last-commit }}.
+          github-token: ${{ env.GITHUB_TOKEN }}
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Latest commit hash: ${{ env.last-commit }}'
+            })
