@@ -45,7 +45,7 @@ jobs:
             })
       - name: print the result of the previous step
         run: |
-          echo "${{ toJson(steps.start-comment.result) }}"
+          echo "${{ toJson(steps.start-comment.outputs.result) }}"
 
       # get pull request ref from ${{ github.event.issue.pull_request.url }}, and print it
       - name: Get pull request ref
