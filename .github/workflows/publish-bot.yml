@@ -40,8 +40,6 @@ jobs:
               `
             })
 
-            console.log(result)
-
             const commentId = result.data.id
 
             return commentId
@@ -66,6 +64,8 @@ jobs:
         with:
           result-encoding: string
           script: |
+            console.log(context)
+
             const res = await github.rest.repos.getCollaboratorPermissionLevel({
               ...context.repo,
               username: context.comment.user.login,
