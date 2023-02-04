@@ -64,10 +64,10 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: `
-              Publishing an insiders build. Will update this comment when done.
-              <details><summary>see more</summary>
+              Okay @${context.payload.comment.user.login}, I'm releasing an insiders' build to npm. I will update this comment when done.
+              <details><summary>More info</summary>
 
-              Follow the workflow run [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+              In case this fails, follow the workflow run [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) to debug.
 
               </details>
               `
@@ -125,8 +125,8 @@ jobs:
 
               *  🚧 This is an insiders' build. It possibly **is not stable and _may_ corrupt your data**. Always **backup your work** before upgrading.
               * If you do try this build, welcome aboard, insider 😉. If you're feeling generous, share some feedback here or on [\`#contributing\`](https://discord.com/channels/870988717190426644/940301611023073400) at Discord.
-              * 🔼 To upgrade, edit \`package.json\` like this:
-
+              * 🔼 To upgrade, edit \`package.json\` and replace the versions of all \`@theatre\` or \`theatric\` packages with their new versions:
+              
               \`\`\`diff
               ${published.map((pkg) => {
                 return `--- ${pkg.packageName}: "old-version",\n+++ ${pkg.packageName}: "${pkg.version}",`
@@ -135,8 +135,12 @@ jobs:
 
               All published packages are on npm:
 
+              ${published.map((pkg) => {
+                return `* [\`${pkg.packageName}@${pkg.version}\`](https://www.npmjs.com/package/${pkg.packageName}/v/${pkg.version})`
+              }).join('\n')}
 
-              Workflow log [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
+
+              Workflow log [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}), published at the request of @${context.payload.comment.user.login}, on commit #${{ steps.pr-ref.outputs.result }}.
 
               </details>
               `
