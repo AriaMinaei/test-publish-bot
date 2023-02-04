@@ -79,13 +79,15 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
+            console.log(context)
+
             const result = await github.rest.issues.updateComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               comment_id: "${{ steps.start-comment.outputs.result }}",
               body: `
-              Published at commit ${{ steps.pr-ref.outputs.result.sha }}.
+              Published at commit ${context.}.
               <details><summary>see more</summary>
 
               Workflow log [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
