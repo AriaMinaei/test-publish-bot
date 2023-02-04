@@ -26,8 +26,6 @@ jobs:
         with:
           # github-token: ${{ env.GITHUB_TOKEN }}
           script: |
-            console.log(context)
-
             const result = await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
@@ -46,7 +44,7 @@ jobs:
 
             const commentId = result.data.id
 
-            const {data: pullRequest} = await this.octokit.rest.pulls.get({
+            const {data: pullRequest} = await github.rest.pulls.get({
               ...github.context.repo,
               pull_number: context.issue.number
             })
