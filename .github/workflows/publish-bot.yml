@@ -72,7 +72,7 @@ jobs:
       # checkout the repo at the latest commit of the PR
       - uses: actions/checkout@v2
         with:
-          ref: ${{ steps.pr-ref.outputs.result.sha }}
+          ref: ${{ fromJSON( steps.pr-ref.outputs.result.sha ) }}
 
       - name: Update the comment
         id: update-comment
