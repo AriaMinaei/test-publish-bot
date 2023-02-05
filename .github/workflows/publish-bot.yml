@@ -36,6 +36,7 @@ jobs:
             const hasPermission = ['admin', 'write', 'maintain'].includes(res.data.permission)
 
             if (!hasPermission) {
+              // if the user doesn't have write access, comment on the PR
               await github.rest.issues.createComment({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
@@ -99,11 +100,24 @@ jobs:
         with:
           ref: ${{ steps.pr-ref.outputs.result }}
 
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+      - name: Install dependencies
+        run: yarn install
+
+      - id: test-zx
+        run: yarn zx ./t.mjs
+
       - name: Update the comment
         id: update-comment
         uses: actions/github-script@v6
         with:
           script: |
+            console.log(steps.test-zx.outputs.result)
+
             const published = [{
               packageName: "@theatre/core",
               version: "0.6.0-insiders.sdlkfj29",

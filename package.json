@@ -3,5 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "author": "Aria Minaei",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "zx": "^7.1.1"
+  }
 }
