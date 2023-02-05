@@ -8,4 +8,4 @@ const data = {
   },
 }
 
-await echo`"data=y" >> $GITHUB_OUTPUT`
+echo`"data=some-string" >> $GITHUB_OUTPUT`
