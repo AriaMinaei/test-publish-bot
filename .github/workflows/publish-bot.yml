@@ -116,7 +116,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            console.log(${{ toJSON (steps.test-zx.outputs) }})
+            console.log(${{ steps.test-zx.outputs }})
             console.log(context)
 
             const published = [{
