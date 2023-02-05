@@ -8,4 +8,6 @@ const data = {
   },
 }
 
+console.log("hi")
+
 await echo`{data}={${JSON.stringify(data)}}`
