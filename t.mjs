@@ -8,4 +8,4 @@ const data = {
   },
 }
 
-echo`"data=some-string" >> $GITHUB_OUTPUT`
+echo`"data=str" >> $GITHUB_OUTPUT`
