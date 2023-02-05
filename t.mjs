@@ -1,4 +1,4 @@
-import {echo} from "zx"
+import * as core from "@actions/core"
 
 const data = {
   a: 1,
@@ -8,4 +8,4 @@ const data = {
   },
 }
 
-echo`"data=str" >> $GITHUB_OUTPUT`
+core.setOutput("data", JSON.stringify(data))
