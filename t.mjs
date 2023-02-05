@@ -1,11 +1,14 @@
 import * as core from "@actions/core"
 
-const data = {
-  a: 1,
-  b: "a string",
-  d: {
-    val: `a nested string, with }, and {, and quotes \", and backslashes \\, and newlines\n, and backticks\``,
+const data = [
+  {
+    packageName: "@theatre/core",
+    version: "0.6.0-insiders.sdlkfj29",
   },
-}
+  {
+    packageName: "@theatre/studio",
+    version: "0.6.0-insiders.sdlkfj29",
+  },
+]
 
 core.setOutput("data", JSON.stringify(data))
