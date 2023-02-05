@@ -108,7 +108,8 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - id: test-zx
+      - name: Test ZX
+        id: test-zx
         run: yarn test
 
       - name: Update the comment
@@ -117,7 +118,6 @@ jobs:
         with:
           script: |
             console.log(${{ toJSON( steps.test-zx.outputs.data ) }})
-            console.log(context)
 
             const published = [{
               packageName: "@theatre/core",
