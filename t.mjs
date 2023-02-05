@@ -10,4 +10,4 @@ const data = {
 
 console.log("hi")
 
-await echo`{data}={${JSON.stringify(data)}} >> $GITHIB_OUTPUT`
+await echo`"data=${JSON.stringify(data)}" >> $GITHIB_OUTPUT`
