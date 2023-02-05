@@ -109,14 +109,14 @@ jobs:
         run: yarn install
 
       - id: test-zx
-        run: yarn zx ./t.mjs
+        run: yarn test
 
       - name: Update the comment
         id: update-comment
         uses: actions/github-script@v6
         with:
           script: |
-            console.log(steps.test-zx.outputs.result)
+            console.log(steps.test-zx.outputs)
 
             const published = [{
               packageName: "@theatre/core",
