@@ -8,4 +8,4 @@ const data = {
   },
 }
 
-await echo`"{data}={\"x\": \"y\"}" >> $GITHUB_OUTPUT`
+await echo`"data=y" >> $GITHUB_OUTPUT`
