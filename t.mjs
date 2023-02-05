@@ -8,6 +8,4 @@ const data = {
   },
 }
 
-console.log("hi")
-
-await echo`"{data}={${JSON.stringify(data)}}" >> $GITHUB_OUTPUT`
+await echo`"{data}={\"x\": \"y\"}" >> $GITHUB_OUTPUT`
